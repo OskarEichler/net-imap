@@ -49,9 +49,7 @@ class SearchDataTests < Net::IMAP::TestCase
     assert_equal  with_modseq.hash,  with_modseq.dup.hash
     assert_equal other_modseq.hash, other_modseq.dup.hash
 
-    pend "Bug #738" do
-      refute_operator    no_modseq, :eql?,  with_modseq
-    end
+    refute_operator    no_modseq, :eql?,  with_modseq
     refute_operator  with_modseq, :eql?,    no_modseq
     refute_operator  with_modseq, :eql?, other_modseq
     refute_operator other_modseq, :eql?,    no_modseq
