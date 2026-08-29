@@ -38,11 +38,10 @@ class SearchDataTests < Net::IMAP::TestCase
     refute_equal nomodseq, sorted
   end
 
-  test "#eql? and #hash always compare modseq" do
-    array = [2, 4, 99, 2048]
-    no_modseq    = SearchResult[*array]
-    with_modseq  = SearchResult[*array, modseq: 4000]
-    other_modseq = SearchResult[*array, modseq: 5000]
+  test "#eql? and #hash include the result type and modseq" do
+    no_modseq    = SearchResult[1, 2]
+    with_modseq  = SearchResult[1, 2, modseq: 3]
+    other_modseq = SearchResult[1, 2, modseq: 4]
     assert_operator    no_modseq, :eql?,    no_modseq.dup
     assert_operator  with_modseq, :eql?,  with_modseq.dup
     assert_operator other_modseq, :eql?, other_modseq.dup
