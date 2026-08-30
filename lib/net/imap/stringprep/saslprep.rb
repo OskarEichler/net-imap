@@ -51,8 +51,8 @@ module Net
           # raise helpful errors to indicate *why* it failed:
           tables = stored ? TABLES_PROHIBITED_STORED : TABLES_PROHIBITED
           StringPrep.check_prohibited! str, *tables, bidi: true, profile: "SASLprep"
-          raise InvalidStringError.new(
-            "unknown error", string: string, profile: "SASLprep"
+          raise StringPrepError.new(
+            "unknown error", string: str, profile: "SASLprep"
           )
         rescue ArgumentError, Encoding::CompatibilityError => ex
           if /invalid byte sequence|incompatible encoding/.match? ex.message

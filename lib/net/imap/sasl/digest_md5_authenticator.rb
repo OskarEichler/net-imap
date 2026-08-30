@@ -199,7 +199,7 @@ class Net::IMAP::SASL::DigestMD5Authenticator
     when STAGE_ONE
       @stage = STAGE_TWO
       @sparams = parse_challenge(challenge)
-      @qop     = sparams.key?("qop") ? ["auth"] : sparams["qop"].flatten
+      @qop     = sparams.key?("qop") ? sparams["qop"].flatten : ["auth"]
       @nonce   = sparams["nonce"]  &.first
       @charset = sparams["charset"]&.first
       @realm ||= sparams["realm"]  &.last
@@ -325,14 +325,14 @@ class Net::IMAP::SASL::DigestMD5Authenticator
   end
 
   def format_response(response)
-    response.map {|k, v| qdval(k.to_s, v) }.join(",")
+    response.filter_map {|k, v| qdval(k.to_s, v) }.join(",")
   end
 
   # some responses need quoting
   def qdval(k, v)
     return if k.nil? or v.nil?
     if %w"username authzid realm nonce cnonce digest-uri qop".include? k
-      v = v.gsub(/([\\"])/, "\\\1")
+      v = v.gsub(/([\\"])/) { "\\#{_1}" }
       return '%s="%s"' % [k, v]
     else
       return '%s=%s' % [k, v]

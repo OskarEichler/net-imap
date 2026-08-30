@@ -33,7 +33,7 @@ module Net
       #
       # Raises ResponseParseError for unparsable strings.
       def parse(str)
-        @str = str
+        @str = str.b
         @pos = 0
         @lex_state = EXPR_BEG
         @token = nil

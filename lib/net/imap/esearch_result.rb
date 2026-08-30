@@ -35,7 +35,7 @@ module Net
       def initialize(tag: nil, uid: nil, data: nil)
         tag  => String       | nil; tag = -tag if tag
         uid  => true | false | nil; uid = !!uid
-        data => Array        | nil; data ||= []; data.freeze
+        data => Array        | nil; data = (data || []).dup.freeze
         super
       end
 

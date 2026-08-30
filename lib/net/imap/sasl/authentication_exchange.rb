@@ -124,6 +124,7 @@ module Net
 
         def initial_response
           return unless send_initial_response?
+          @processed = true
           client.encode_ir authenticator.process nil
         end
 

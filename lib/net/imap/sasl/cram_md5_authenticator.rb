@@ -42,15 +42,17 @@ class Net::IMAP::SASL::CramMD5Authenticator
   private
 
   def hmac_md5(text, key)
-    if key.length > 64
+    key = key.b
+    text = text.b
+    if key.bytesize > 64
       key = Digest::MD5.digest(key)
     end
 
-    k_ipad = key + "\0" * (64 - key.length)
-    k_opad = key + "\0" * (64 - key.length)
+    k_ipad = key + "\0" * (64 - key.bytesize)
+    k_opad = key + "\0" * (64 - key.bytesize)
     for i in 0..63
-      k_ipad[i] = (k_ipad[i].ord ^ 0x36).chr
-      k_opad[i] = (k_opad[i].ord ^ 0x5c).chr
+      k_ipad.setbyte(i, k_ipad.getbyte(i) ^ 0x36)
+      k_opad.setbyte(i, k_opad.getbyte(i) ^ 0x5c)
     end
 
     digest = Digest::MD5.digest(k_ipad + text)

@@ -852,8 +852,10 @@ module Net
 
       protected
 
-      def all_seqnos(node = self)
-        [node.seqno].concat node.children.flat_map { _1.all_seqnos }
+      def all_seqnos(node = self, seqnos = [])
+        seqnos << node.seqno if node.seqno
+        node.children.each { all_seqnos(_1, seqnos) }
+        seqnos
       end
 
     end
